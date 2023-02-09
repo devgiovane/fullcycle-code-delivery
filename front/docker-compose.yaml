@@ -1,0 +1,16 @@
+version: '3'
+services:
+  frontend:
+    build: .
+    image: react:codedelivery
+    container_name: frontend
+    entrypoint: ./.docker/react/entrypoint.sh
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/home/node/app
+    networks:
+      - api-network
+networks:
+  api-network:
+    external: true

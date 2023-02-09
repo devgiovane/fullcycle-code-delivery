@@ -1,0 +1,13 @@
+version: '3'
+services:
+  application:
+    build: .
+    image: go:codedelivery
+    container_name: application
+    volumes:
+      - .:/go/src
+    networks:
+      - kafka-network
+networks:
+  kafka-network:
+    external: true

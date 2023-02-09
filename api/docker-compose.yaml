@@ -1,0 +1,40 @@
+version: '3'
+services:
+  api:
+    build: .
+    image: nest:codedelivery
+    container_name: api
+    entrypoint: ./.docker/nest/entrypoint.sh
+    ports:
+      - 3001:3001
+    volumes:
+      - .:/home/node/app
+    networks:
+      - api
+      - kafka-network
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - mongod:/data/db
+      - ./.docker/mongo:/docker-entrypoint-initdb.d
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: dfe4da18
+      MONGO_INITDB_DATABASE: nest
+    networks:
+      - api
+volumes:
+  mongod:
+    driver: local
+networks:
+  api:
+    driver: bridge
+    name: api-network
+  kafka-network:
+    external: true
